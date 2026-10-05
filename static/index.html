@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#05070a" />
+  <title>NULL//SHIFT — Multiplayer Sabotage</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="scanlines"></div>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand"><span class="brand-null">NULL</span><span class="brand-slash">//</span><span>SHIFT</span></div>
+      <div id="connection" class="connection"><span class="dot"></span><span>CONNECTING</span></div>
+    </header>
+
+    <main>
+      <section id="landing" class="screen landing active">
+        <div class="hero-copy">
+          <div class="eyebrow">REAL-TIME MULTIPLAYER SABOTAGE</div>
+          <h1>OWN THE SYSTEM.<br><span>BREAK EVERYONE ELSE.</span></h1>
+          <p>Capture the shared grid, weaponize system failures, and survive the final collapse. Every move hits every screen live.</p>
+        </div>
+        <div class="join-card glass">
+          <div class="mode-tabs">
+            <button class="tab active" data-tab="create">CREATE SIGNAL</button>
+            <button class="tab" data-tab="join">JOIN SIGNAL</button>
+          </div>
+          <label>OPERATOR NAME<input id="nameInput" maxlength="16" autocomplete="nickname" placeholder="Enter callsign" /></label>
+          <div id="joinCodeWrap" class="hidden">
+            <label>ROOM CODE<input id="codeInput" maxlength="4" autocomplete="off" autocapitalize="characters" placeholder="X7K9" /></label>
+          </div>
+          <button id="primaryBtn" class="primary">CREATE ROOM</button>
+          <div class="microcopy">No accounts. No install. One shared battlefield.</div>
+        </div>
+      </section>
+
+      <section id="lobby" class="screen lobby">
+        <div class="lobby-hero">
+          <div class="eyebrow">SIGNAL ESTABLISHED</div>
+          <h2>ROOM <button id="copyCode" class="room-code" title="Copy room code">----</button></h2>
+          <p>Friends open this same link, choose “Join Signal,” and enter the code.</p>
+        </div>
+        <div class="lobby-grid">
+          <div class="glass panel">
+            <div class="panel-title"><span>CONNECTED OPERATORS</span><span id="playerCount">0/8</span></div>
+            <div id="lobbyPlayers" class="lobby-players"></div>
+          </div>
+          <div class="glass briefing">
+            <div class="panel-title">MISSION BRIEF</div>
+            <ol>
+              <li>Tap nodes to capture them. Enemy nodes cost more energy.</li>
+              <li>The center Reactor supercharges its owner.</li>
+              <li>Use powers to shield, jam, overload, or force chaos.</li>
+              <li>Global SHIFT events rewrite the rules for everyone.</li>
+              <li>Your secret objective can steal the match at the end.</li>
+            </ol>
+            <button id="startBtn" class="primary">INITIATE NULL</button>
+            <div id="hostHint" class="microcopy"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="game" class="screen game">
+        <div class="hud-row">
+          <div class="hud-block"><span class="hud-label">ROOM</span><strong id="gameRoom">----</strong></div>
+          <div class="hud-timer"><span id="phaseLabel">SYSTEM STABLE</span><strong id="timer">02:00</strong></div>
+          <div class="hud-block right"><span class="hud-label">ENERGY</span><strong id="energy">0</strong></div>
+        </div>
+
+        <div id="shiftBanner" class="shift-banner hidden"><span>SHIFT</span><strong id="shiftName">BLACKOUT</strong><small id="shiftTime"></small></div>
+        <div id="jamOverlay" class="jam-overlay hidden">SIGNAL JAMMED</div>
+
+        <div class="game-layout">
+          <aside class="sidebar leftbar glass">
+            <div class="panel-title">OPERATORS</div>
+            <div id="scoreboard" class="scoreboard"></div>
+            <div class="secret-card">
+              <span>SECRET OBJECTIVE</span>
+              <strong id="secretText">Awaiting mission...</strong>
+              <small id="secretBonus"></small>
+            </div>
+          </aside>
+
+          <section class="arena-shell">
+            <div class="arena-head">
+              <div><span class="eyebrow">SHARED NETWORK</span><h3>NULL GRID</h3></div>
+              <div id="selectedInfo" class="selected-info">SELECT A NODE</div>
+            </div>
+            <div id="arena" class="arena" aria-label="5 by 5 capture grid"></div>
+            <div class="arena-legend"><span>Tap a node to capture</span><span class="reactor-mark">◇ Reactor</span><span>Enemy nodes cost more</span></div>
+          </section>
+
+          <aside class="sidebar powers glass">
+            <div class="panel-title">ABILITIES</div>
+            <button class="power" data-power="shield"><span class="power-icon">⬡</span><span><strong>SHIELD</strong><small>Protect selected owned node</small></span><em>18</em></button>
+            <button class="power" data-power="jam"><span class="power-icon">⌁</span><span><strong>JAM</strong><small>Freeze the current leader</small></span><em>22</em></button>
+            <button class="power" data-power="overload"><span class="power-icon">×</span><span><strong>OVERLOAD</strong><small>Neutralize selected enemy node</small></span><em>25</em></button>
+            <button class="power chaos" data-power="chaos"><span class="power-icon">✦</span><span><strong>CHAOS</strong><small>Force a random SHIFT</small></span><em>30</em></button>
+            <div class="feed-wrap"><div class="panel-title small">LIVE FEED</div><div id="feed" class="feed"></div></div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="countdown" class="countdown-layer hidden"><div><span>SYSTEM LINK</span><strong id="countdownNumber">3</strong><small>PREPARE TO SHIFT</small></div></section>
+
+      <section id="results" class="screen results">
+        <div class="results-head"><div class="eyebrow">SYSTEM COLLAPSED</div><h2 id="winnerTitle">OPERATOR SURVIVED</h2><p id="winnerName">—</p></div>
+        <div id="resultList" class="result-list"></div>
+        <button id="rematchBtn" class="primary">RUN IT BACK</button>
+        <div id="rematchHint" class="microcopy"></div>
+      </section>
+    </main>
+
+    <div id="toast" class="toast hidden"></div>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>
