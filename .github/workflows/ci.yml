@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: python -m pip install -r requirements-dev.txt
+      - run: python -c "import redis.asyncio"
+      - run: python -m py_compile game.py state_store.py server.py
+      - run: pytest -q
+      - name: WebSocket integration
+        shell: bash
+        run: |
+          PORT=8765 python server.py > /tmp/nullshift-server.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID || true' EXIT
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:8765/healthz >/dev/null; then break; fi
+            sleep 0.2
+          done
+          python tests/integration_ws.py
+          python tests/integration_multi_instance.py
